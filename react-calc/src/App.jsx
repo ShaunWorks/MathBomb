@@ -4,11 +4,15 @@ import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { ClearButton } from "./components/ClearButton";
 import { BackButton } from "./components/BackButton";
+import { Bomb } from "./components/Bomb"
 import * as math from "mathjs";
 
 export class App extends Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKey);
+    setInterval(() => {
+      this.createBomb()
+    }, 5000);
   }
 
   componentWillUnmount() {
@@ -16,12 +20,15 @@ export class App extends Component {
   }
 
   handleKey = e => {
-    if (e.key === '.' || !isNaN(e.key) || this.operators.some(operator => e.key.includes(operator)))
+    if (e.key === '.' || !isNaN(e.key) || this.isOperator(e.key))
       this.addToInput(e.key);
     else if (e.key === 'Enter' || e.key === '=')
-      this.handleEqual();
+      this.parseExpression();
     else if (e.key === 'c')
-      this.clearInput();
+      this.createBomb();
+    //this.clearInput();
+    else if (e.key === 'Backspace')
+      this.removeLastInput();
   }
 
   constructor(props) {
@@ -29,45 +36,78 @@ export class App extends Component {
 
     this.operators = ['+', '-', '*', '/'];
     this.state = {
-      input: ''
+      input: '',
+      bombs: [],
+      id: 0
     };
   }
 
-  clearInput = () => this.setState({ input: "" })
-  removeLastInput = () => this.setState({input: this.state.input.substring(0,this.state.input.length - 1)})
+createBomb = () => {
+  let b = this.state.bombs;
+  if(b.length < 3)
+  b.push(<Bomb key={this.state.id}></Bomb>);
+  this.setState({
+    bombs: b
+  },
+    this.setState({ id: this.state.id + 1 }))
+}
 
-  /**
-   * Adds the selected button's value to the input.
-   * Stops operators and decimal points from being added if
-   * the input is empty or the last input is not a number.
-   */
-  addToInput = val => {
-    const input = this.state.input;
-    if ((input !== "" && !isNaN((input).slice(-1))) || !isNaN(val))
-      this.setState({ input: this.state.input + val });
-  };
+isOperator = val => this.operators.some(operator => val.includes(operator));
 
-  // if checkEval() returns true, evaluate the input and set the input state.
-  handleEqual = () => {
-    if (this.checkEval()) 
-      this.setState({ input: String(Math.round((math.eval(this.state.input) + 0.00001) * 100) / 100) });
-  };
+clearInput = () => this.setState({ input: "" })
+removeLastInput = () => this.setState({ input: this.state.input.substring(0, this.state.input.length - 1) })
 
-  // returns if the input includes an operator and that it ends with a number
-  checkEval = () => {
-    const input = this.state.input;
-    if (this.operators.some(operator => input.includes(operator)))
-      if (!isNaN(input.slice(-1))) 
-        return true;
-      else console.log("error: doesnt end with number");
-    else console.log("error: needs to include an operator");
+// Adds the selected button's value to the input.
+// Stops operators and decimal points from being added if
+// the input is empty or the last input is not a number.
+addToInput = val => {
+  const input = this.state.input;
+  if ((input !== "" && !isNaN((input).slice(-1))) || !isNaN(val))
+    this.setState({ input: this.state.input + val });
+};
 
-    return false;
-  };
+// evaluate the input return the result
+handleEqual = val => String(Math.round((math.eval(val) + 0.00001) * 100) / 100);
 
-  render() {
-    return (
-      <div className="app">
+// returns if the input includes an operator and that it ends with a number
+checkEval = () => {
+  const input = this.state.input;
+  if (this.isOperator(input))
+    if (!isNaN(input.slice(-1)))
+      return true;
+    else console.log("error: doesnt end with number");
+  else console.log("error: needs to include an operator");
+
+  return false;
+};
+
+parseExpression = () => {
+  const input = this.state.input;
+  let ops = 0;
+  if (this.checkEval()) {
+    // loops through each char in input and check if its an operator
+    // loop starts at 1 to avoid intrepeting a negative sign as a minus operator
+    for (let i = 1; i < input.length; i++) {
+      if (this.isOperator(input.charAt(i)))
+        ops++;
+      if (ops === 2) {
+        let result = this.handleEqual(input.slice(0, i));
+        this.setState({ input: result + input.slice(i) });
+        return setTimeout(() => this.parseExpression(), 1000)
+      }
+    }
+    return this.setState({ input: this.handleEqual(input) });
+  }
+  return console.log("not valid to parse")
+}
+
+render() {
+  return (
+    <div className="app">
+      <div className="game">
+        <div className="bomb-wrapper">
+          {this.state.bombs}
+        </div>
         <div className="calc-wrapper">
           <Input input={this.state.input} />
           <div className="row">
@@ -91,7 +131,7 @@ export class App extends Component {
           <div className="row">
             <Button handleClick={this.addToInput}>.</Button>
             <Button handleClick={this.addToInput}>0</Button>
-            <Button handleClick={this.handleEqual}>=</Button>
+            <Button handleClick={this.parseExpression}>=</Button>
             <Button handleClick={this.addToInput}>+</Button>
           </div>
           <div className="row">
@@ -104,8 +144,9 @@ export class App extends Component {
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 }
 
 export default App;
