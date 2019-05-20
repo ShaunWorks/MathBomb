@@ -44,11 +44,19 @@ export class App extends Component {
   createBomb = () => {
     let b = this.state.bombs;
     if (b.length < 3)
-      b.push(<Bomb key={this.state.id}></Bomb>);
-    this.setState({
-      bombs: b
-    },
+      b.push({
+        key: this.state.id,
+        id: this.state.id,
+        timer: Math.floor(Math.random() * 10),
+        value: Math.floor(Math.random() * 10)
+      })
+
+    this.setState({ bombs: b },
       this.setState({ id: this.state.id + 1 }))
+  }
+
+  removeBomb = id => {
+    this.setState({})
   }
 
   isOperator = val => this.operators.some(operator => val.includes(operator));
@@ -105,7 +113,9 @@ export class App extends Component {
       <div className="app">
         <div className="game">
           <div className="bomb-wrapper">
-            {this.state.bombs}
+            {this.state.bombs.map(bomb => {
+              return <Bomb key={bomb.id} id={bomb.id} timer={bomb.timer} value={bomb.value} />
+            })}
           </div>
           <div className="calc-wrapper">
             <Input input={this.state.input} />
