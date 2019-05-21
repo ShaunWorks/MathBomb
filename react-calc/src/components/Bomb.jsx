@@ -15,7 +15,7 @@ export class Bomb extends Component {
   timer;
 
   componentDidMount() {
-    this.timer = setInterval(this.decreaseTimer, 1000);
+    this.timer = setInterval(this.decreaseTimer, 1500);
     this.setState({
       timer: this.props.timer,
       value: this.props.value
@@ -26,17 +26,22 @@ export class Bomb extends Component {
     clearInterval(this.timer);
   }
 
+  componentDidUpdate() {
+    if(this.state.timer === 0)
+     this.props.handleRemove(this.props.position);
+  }
+
   decreaseTimer = () => {
     this.setState(prevState => ({timer: prevState.timer - 1}));
   }
 
   render() {
     return (
-        <div className="bomb">
+        <>
           <div className="value">{this.state.value}</div>
           <div className="timer">{Math.round(this.state.timer * 100) / 100}</div>
           <img src={image} alt="bomb" />
-        </div>
+        </>
     )
   }
 }

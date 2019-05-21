@@ -1,0 +1,16 @@
+.appbar {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.score {
+    flex-grow: 1;
+    padding-left: 15px;
+}
+
+.lives {
+    padding-right: 15px;
+}

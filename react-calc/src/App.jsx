@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import { AppBar } from "./components/AppBar"
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { ClearButton } from "./components/ClearButton";
@@ -14,8 +15,10 @@ export class App extends Component {
     this.operators = ['+', '-', '*', '/'];
     this.state = {
       input: '',
-      bombs: [],
-      id: 0
+      bombs: [null, null, null],
+      id: 0,
+      score: 0,
+      lives: 3
     };
   }
 
@@ -43,23 +46,23 @@ export class App extends Component {
 
   createBomb = () => {
     let b = this.state.bombs;
-    if (b.length < 3) {
-      b.push({
-        key: this.state.id,
-        id: this.state.id,
-        timer: Math.floor(Math.random() * 10),
-        value: Math.floor(Math.random() * 10)
-      })
-
-    this.setState({ bombs: b },
-      this.setState({ id: this.state.id + 1 }))
+    for (let i = 0; i < b.length; i++) {
+      if (!b[i]) {
+        b[i] = {
+          key: this.state.id,
+          position: i,
+          timer: 5 + Math.floor(Math.random() * 5),
+          value: Math.floor(Math.random() * 10)
+        }
+        this.setState({ bombs: b })
+        return;
+      }
     }
   }
 
-  removeBomb = id => {
+  removeBomb = index => {
     const arr = this.state.bombs;
-    arr.splice(id, 1)
-    //arr.find(element => { return element.id === id})
+    arr[index] = null;
     this.setState({ bombs: arr })
   }
 
@@ -80,13 +83,18 @@ export class App extends Component {
   // evaluate the input return the result
   handleEqual = val => {
     const roundedVal = Math.round((math.eval(val) + 0.00001) * 100) / 100
-    const arr = this.state.bombs;
-    const index = arr.findIndex(element => {return element.value === roundedVal})
-    if (index !== -1)
-      this.removeBomb(index)
+    const arr = this.state.bombs.filter(element => element !== null);
+    arr.filter(element => element.value === roundedVal)
+      .map(element => this.handleScore(element.position))
     return String(roundedVal)
   };
 
+  handleScore = position => {
+    this.removeBomb(position);
+    this.setState(prevState => ({score: prevState.score + 100}))
+  }
+
+  chain = 1;
   // returns if the input includes an operator and that it ends with a number
   checkEval = () => {
     const input = this.state.input;
@@ -122,10 +130,15 @@ export class App extends Component {
   render() {
     return (
       <div className="app">
+        <AppBar score={this.state.score} lives={this.state.lives} />
         <div className="game">
           <div className="bomb-wrapper">
             {this.state.bombs.map(bomb => {
-              return <Bomb key={bomb.id} id={bomb.id} timer={bomb.timer} value={bomb.value}/>
+              return (
+                <div style={{ paddingLeft: 34, width: 50 }}>
+                  {bomb ? <Bomb position={bomb.position} timer={bomb.timer} value={bomb.value} handleRemove={this.removeBomb} /> : null}
+                </div>
+              )
             })}
           </div>
           <div className="calc-wrapper">
@@ -168,5 +181,6 @@ export class App extends Component {
     );
   }
 }
+
 
 export default App;
