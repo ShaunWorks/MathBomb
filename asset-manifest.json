@@ -1,14 +1,14 @@
 {
-  "main.css": "/TorianHarris/MathBomb/static/css/main.0f21d686.chunk.css",
-  "main.js": "/TorianHarris/MathBomb/static/js/main.baecf6a0.chunk.js",
-  "main.js.map": "/TorianHarris/MathBomb/static/js/main.baecf6a0.chunk.js.map",
-  "runtime~main.js": "/TorianHarris/MathBomb/static/js/runtime~main.2316be96.js",
-  "runtime~main.js.map": "/TorianHarris/MathBomb/static/js/runtime~main.2316be96.js.map",
-  "static/js/2.9de8873a.chunk.js": "/TorianHarris/MathBomb/static/js/2.9de8873a.chunk.js",
-  "static/js/2.9de8873a.chunk.js.map": "/TorianHarris/MathBomb/static/js/2.9de8873a.chunk.js.map",
-  "index.html": "/TorianHarris/MathBomb/index.html",
-  "precache-manifest.0c1a0731161f6150b8ba01c6841588dc.js": "/TorianHarris/MathBomb/precache-manifest.0c1a0731161f6150b8ba01c6841588dc.js",
-  "service-worker.js": "/TorianHarris/MathBomb/service-worker.js",
-  "static/css/main.0f21d686.chunk.css.map": "/TorianHarris/MathBomb/static/css/main.0f21d686.chunk.css.map",
-  "static/media/bomb.png": "/TorianHarris/MathBomb/static/media/bomb.9280f166.png"
+  "main.css": "/MathBomb/static/css/main.0f21d686.chunk.css",
+  "main.js": "/MathBomb/static/js/main.257d9f61.chunk.js",
+  "main.js.map": "/MathBomb/static/js/main.257d9f61.chunk.js.map",
+  "runtime~main.js": "/MathBomb/static/js/runtime~main.7dbd8c02.js",
+  "runtime~main.js.map": "/MathBomb/static/js/runtime~main.7dbd8c02.js.map",
+  "static/js/2.9de8873a.chunk.js": "/MathBomb/static/js/2.9de8873a.chunk.js",
+  "static/js/2.9de8873a.chunk.js.map": "/MathBomb/static/js/2.9de8873a.chunk.js.map",
+  "index.html": "/MathBomb/index.html",
+  "precache-manifest.2edfd140c99fe09933cc4a90250398bb.js": "/MathBomb/precache-manifest.2edfd140c99fe09933cc4a90250398bb.js",
+  "service-worker.js": "/MathBomb/service-worker.js",
+  "static/css/main.0f21d686.chunk.css.map": "/MathBomb/static/css/main.0f21d686.chunk.css.map",
+  "static/media/bomb.png": "/MathBomb/static/media/bomb.9280f166.png"
 }

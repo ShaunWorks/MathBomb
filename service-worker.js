@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/TorianHarris/MathBomb/precache-manifest.0c1a0731161f6150b8ba01c6841588dc.js"
+  "/MathBomb/precache-manifest.2edfd140c99fe09933cc4a90250398bb.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/TorianHarris/MathBomb/index.html", {
+workbox.routing.registerNavigationRoute("/MathBomb/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
