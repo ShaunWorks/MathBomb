@@ -12,12 +12,18 @@ export class Bomb extends Component {
     }
   }
 
+  timer;
+
   componentDidMount() {
-    setInterval(this.decreaseTimer, 1000);
+    this.timer = setInterval(this.decreaseTimer, 1000);
     this.setState({
       timer: this.props.timer,
       value: this.props.value
     })
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   decreaseTimer = () => {

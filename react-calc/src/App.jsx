@@ -43,7 +43,7 @@ export class App extends Component {
 
   createBomb = () => {
     let b = this.state.bombs;
-    if (b.length < 3)
+    if (b.length < 3) {
       b.push({
         key: this.state.id,
         id: this.state.id,
@@ -53,10 +53,14 @@ export class App extends Component {
 
     this.setState({ bombs: b },
       this.setState({ id: this.state.id + 1 }))
+    }
   }
 
   removeBomb = id => {
-    this.setState({})
+    const arr = this.state.bombs;
+    arr.splice(id, 1)
+    //arr.find(element => { return element.id === id})
+    this.setState({ bombs: arr })
   }
 
   isOperator = val => this.operators.some(operator => val.includes(operator));
@@ -74,7 +78,14 @@ export class App extends Component {
   };
 
   // evaluate the input return the result
-  handleEqual = val => String(Math.round((math.eval(val) + 0.00001) * 100) / 100);
+  handleEqual = val => {
+    const roundedVal = Math.round((math.eval(val) + 0.00001) * 100) / 100
+    const arr = this.state.bombs;
+    const index = arr.findIndex(element => {return element.value === roundedVal})
+    if (index !== -1)
+      this.removeBomb(index)
+    return String(roundedVal)
+  };
 
   // returns if the input includes an operator and that it ends with a number
   checkEval = () => {
@@ -114,7 +125,7 @@ export class App extends Component {
         <div className="game">
           <div className="bomb-wrapper">
             {this.state.bombs.map(bomb => {
-              return <Bomb key={bomb.id} id={bomb.id} timer={bomb.timer} value={bomb.value} />
+              return <Bomb key={bomb.id} id={bomb.id} timer={bomb.timer} value={bomb.value}/>
             })}
           </div>
           <div className="calc-wrapper">
@@ -146,7 +157,7 @@ export class App extends Component {
             <div className="row">
               <ClearButton handleClear={this.clearInput}>
                 Clear
-            </ClearButton>
+              </ClearButton>
               <BackButton handleBack={this.removeLastInput}>
                 ←
             </BackButton>
